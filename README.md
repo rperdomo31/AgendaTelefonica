@@ -2,91 +2,104 @@
 Trabajo final 1 para PYT- 01/Programación Python - PYT-01 VIERNES 5-7 PM MARZO - ABRIL 2022 - Prof. Francis Fulgencio
 
 # Code
-class Contact:
-    def __init__(self, contact_id, name, phone):
-        self.contact_id = contact_id
-        self.name = name
-        self.phone = phone
-
+class Contacto:
+    def __init__(self, id, nombre, telefono):
+        self.id = id
+        self.nombre = nombre
+        self.telefono = telefono
+    
     def __str__(self):
-        return f"ID: {self.contact_id}, Name: {self.name}, Phone: {self.phone}"
+        return f"ID: {self.id}, Nombre: {self.nombre}, Teléfono: {self.telefono}"
 
-class PhoneBook:
+class AgendaTelefonica:
     def __init__(self):
-        self.contacts = [
-            Contact(i, f"Contact {i}", f"555-00{i}") for i in range(1, 11)
+        self.contactos = [
+            Contacto(i, f"Contacto{i}", f"123-456-78{i}") for i in range(1, 11)
         ]
-
-    def add_contact(self):
+    
+    def agregar_contacto(self):
         while True:
-            contact_id = int(input("Enter ID: "))
-            name = input("Enter name: ")
-            phone = input("Enter phone: ")
-            self.contacts.append(Contact(contact_id, name, phone))
-            more = input("Do you want to add another contact? (y/n): ")
-            if more.lower() != 'y':
+            id = input("Ingrese ID del contacto: ")
+            nombre = input("Ingrese Nombre: ")
+            telefono = input("Ingrese Teléfono: ")
+            self.contactos.append(Contacto(id, nombre, telefono))
+            
+            otro = input("¿Desea agregar otro contacto? (s/n): ").lower()
+            if otro != 's':
                 break
-
-    def search_contact(self):
-        search_type = input("Search by (id/name): ")
-        if search_type.lower() == "id":
-            contact_id = int(input("Enter ID: "))
-            results = [c for c in self.contacts if c.contact_id == contact_id]
+    
+    def buscar_contacto(self):
+        criterio = input("Buscar por (1) ID o (2) Nombre: ")
+        if criterio == "1":
+            id_buscar = input("Ingrese ID: ")
+            resultados = [c for c in self.contactos if c.id == id_buscar]
+        elif criterio == "2":
+            nombre_buscar = input("Ingrese Nombre: ")
+            resultados = [c for c in self.contactos if nombre_buscar.lower() in c.nombre.lower()]
         else:
-            name = input("Enter name: ")
-            results = [c for c in self.contacts if name.lower() in c.name.lower()]
+            print("Opción inválida.")
+            return
         
-        for contact in results:
-            print(contact)
-        if not results:
-            print("No contacts found.")
-
-    def update_contact(self):
-        contact_id = int(input("Enter ID of contact to update: "))
-        for contact in self.contacts:
-            if contact.contact_id == contact_id:
-                contact.name = input("Enter new name: ") or contact.name
-                contact.phone = input("Enter new phone: ") or contact.phone
-                print("Contact updated.")
+        if resultados:
+            for c in resultados:
+                print(c)
+        else:
+            print("Contacto no encontrado.")
+    
+    def actualizar_contacto(self):
+        id_buscar = input("Ingrese ID del contacto a actualizar: ")
+        for c in self.contactos:
+            if c.id == id_buscar:
+                c.nombre = input("Ingrese nuevo Nombre: ")
+                c.telefono = input("Ingrese nuevo Teléfono: ")
+                print("Contacto actualizado correctamente.")
                 return
-        print("Contact not found.")
-
-    def delete_contact(self):
-        contact_id = int(input("Enter ID of contact to delete: "))
-        self.contacts = [c for c in self.contacts if c.contact_id != contact_id]
-        print("Contact deleted.")
-
-    def list_contacts(self):
-        for contact in self.contacts:
-            print(contact)
-
+        print("Contacto no encontrado.")
+    
+    def borrar_contacto(self):
+        id_buscar = input("Ingrese ID del contacto a borrar: ")
+        for c in self.contactos:
+            if c.id == id_buscar:
+                self.contactos.remove(c)
+                print("Contacto eliminado correctamente.")
+                return
+        print("Contacto no encontrado.")
+    
+    def listar_contactos(self):
+        if self.contactos:
+            for c in self.contactos:
+                print(c)
+        else:
+            print("No hay contactos guardados.")
+    
     def menu(self):
         while True:
-            print("\nPhone Book Menu")
-            print("1. Add Contact")
-            print("2. Search Contact")
-            print("3. Update Contact")
-            print("4. Delete Contact")
-            print("5. List Contacts")
-            print("6. Exit")
-            choice = input("Choose an option: ")
+            print("\n--- Agenda Telefónica ---")
+            print("1. Agregar Contacto")
+            print("2. Buscar Contacto")
+            print("3. Actualizar Contacto")
+            print("4. Borrar Contacto")
+            print("5. Listar Contactos")
+            print("6. Salir")
             
-            if choice == "1":
-                self.add_contact()
-            elif choice == "2":
-                self.search_contact()
-            elif choice == "3":
-                self.update_contact()
-            elif choice == "4":
-                self.delete_contact()
-            elif choice == "5":
-                self.list_contacts()
-            elif choice == "6":
-                print("Exiting phone book.")
+            opcion = input("Seleccione una opción: ")
+            
+            if opcion == "1":
+                self.agregar_contacto()
+            elif opcion == "2":
+                self.buscar_contacto()
+            elif opcion == "3":
+                self.actualizar_contacto()
+            elif opcion == "4":
+                self.borrar_contacto()
+            elif opcion == "5":
+                self.listar_contactos()
+            elif opcion == "6":
+                print("Saliendo...")
                 break
             else:
-                print("Invalid choice, try again.")
+                print("Opción inválida. Intente de nuevo.")
 
 if __name__ == "__main__":
-    phone_book = PhoneBook()
-    phone_book.menu()
+    agenda = AgendaTelefonica()
+    agenda.menu()
